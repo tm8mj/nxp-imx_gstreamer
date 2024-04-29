@@ -749,6 +749,11 @@ gst_device_provider_hide_provider (GstDeviceProvider * provider,
   g_return_if_fail (GST_IS_DEVICE_PROVIDER (provider));
   g_return_if_fail (name != NULL);
 
+  /* Workaround to unhide v4l2deviceprovider to avoid "gst-device-monitor-1.0 Video"
+   * fail when libcameraprovider is available. */
+  if (!strcmp (name, "v4l2deviceprovider"))
+    return;
+
   GST_OBJECT_LOCK (provider);
   find =
       g_list_find_custom (provider->priv->hidden_providers, name,
